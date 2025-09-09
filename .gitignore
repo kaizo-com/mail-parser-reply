@@ -57,3 +57,4 @@ venv.bak/
 # macOS Zeug
 .DS_Store
 /static/
+settings.json
