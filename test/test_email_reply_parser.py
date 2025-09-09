@@ -218,6 +218,87 @@ class EmailMessageTest(unittest.TestCase):
         mail = self.get_email("begins_with_signature", parse=True, languages=["en"])
         self.assertTrue(mail.replies[0].signatures.startswith("Regards,"))
 
+    # Chinese language tests
+    def test_zh_simple_body(self):
+        mail = self.get_email("email_zh_1_1", parse=True, languages=["zh"])
+        self.assertEqual(1, len(mail.replies))
+        self.assertTrue("你好！" in mail.replies[0].body)
+        self.assertTrue("谢谢您的信息" in mail.replies[0].body)
+        self.assertTrue("此致" in mail.replies[0].signatures)
+        self.assertTrue("李明" in mail.replies[0].signatures)
+        self.assertTrue("此致" not in mail.replies[0].body)
+
+    def test_zh_simple_quoted_reply(self):
+        mail = self.get_email("email_zh_1_2", parse=True, languages=["zh"])
+        self.assertEqual(2, len(mail.replies))
+        self.assertTrue("收到了，谢谢！" in mail.replies[0].body)
+        self.assertTrue("我会按时参加会议" in mail.replies[0].body)
+        self.assertTrue("祝好" in mail.replies[0].signatures)
+        self.assertTrue("张三" in mail.replies[0].signatures)
+        self.assertTrue(
+            "2024年1月15日 下午2:30，王五 <wangwu@example.com> 写道："
+            in mail.replies[1].headers
+        )
+        self.assertTrue(
+            "2024年1月15日 下午2:30，王五 <wangwu@example.com> 写道："
+            not in mail.replies[1].body
+        )
+        self.assertTrue("> 明天下午3点开会" in mail.replies[1].body)
+
+    # Korean language tests  
+    def test_ko_simple_body(self):
+        mail = self.get_email("email_ko_1_1", parse=True, languages=["ko"])
+        self.assertEqual(1, len(mail.replies))
+        self.assertTrue("안녕하세요!" in mail.replies[0].body)
+        self.assertTrue("정보를 주셔서 감사합니다" in mail.replies[0].body)
+        self.assertTrue("감사합니다," in mail.replies[0].signatures)  # comma makes it signature-specific
+        self.assertTrue("김철수" in mail.replies[0].signatures)
+        self.assertTrue("김철수" not in mail.replies[0].body)
+
+    def test_ko_simple_quoted_reply(self):
+        mail = self.get_email("email_ko_1_2", parse=True, languages=["ko"])
+        self.assertEqual(2, len(mail.replies))
+        self.assertTrue("네, 알겠습니다!" in mail.replies[0].body)
+        self.assertTrue("시간에 맞춰 참석하겠습니다" in mail.replies[0].body)
+        self.assertTrue("좋은 하루 되세요" in mail.replies[0].signatures)
+        self.assertTrue("박영희" in mail.replies[0].signatures)
+        self.assertTrue(
+            "2024년 1월 15일 오후 2시 30분에 이민수님이 작성하였습니다:"
+            in mail.replies[1].headers
+        )
+        self.assertTrue(
+            "2024년 1월 15일 오후 2시 30분에 이민수님이 작성하였습니다:"
+            not in mail.replies[1].body
+        )
+        self.assertTrue("> 내일 오후 3시에 회의가 있습니다" in mail.replies[1].body)
+
+    # Czech language tests
+    def test_cs_simple_body(self):
+        mail = self.get_email("email_cs_1_1", parse=True, languages=["cs"])
+        self.assertEqual(1, len(mail.replies))
+        self.assertTrue("Dobrý den!" in mail.replies[0].body)
+        self.assertTrue("Děkuji za informace" in mail.replies[0].body)
+        self.assertTrue("S pozdravem" in mail.replies[0].signatures)
+        self.assertTrue("Jan Novák" in mail.replies[0].signatures)
+        self.assertTrue("S pozdravem" not in mail.replies[0].body)
+
+    def test_cs_simple_quoted_reply(self):
+        mail = self.get_email("email_cs_1_2", parse=True, languages=["cs"])
+        self.assertEqual(2, len(mail.replies))
+        self.assertTrue("Ano, rozumím!" in mail.replies[0].body)
+        self.assertTrue("Budu tam včas" in mail.replies[0].body)
+        self.assertTrue("Děkujeme" in mail.replies[0].signatures)
+        self.assertTrue("Marie Svobodová" in mail.replies[0].signatures)
+        self.assertTrue(
+            "Dne 15. ledna 2024 14:30 Petr Dvořák <petr.dvorak@example.com> napsal(a):"
+            in mail.replies[1].headers
+        )
+        self.assertTrue(
+            "Dne 15. ledna 2024 14:30 Petr Dvořák <petr.dvorak@example.com> napsal(a):"
+            not in mail.replies[1].body
+        )
+        self.assertTrue("> Zítra v 15:00 bude schůzka" in mail.replies[1].body)
+
     def get_email(self, name: str, parse: bool = True, languages: list = None):
         """Return EmailMessage instance or text content"""
         with open(f"test/emails/{name}.txt") as f:
