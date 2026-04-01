@@ -16,7 +16,7 @@ QUOTED_MATCH_INCLUDE = r'(?:> ?)*'
 #: used within signatures
 OUTLOOK_MAIL_SEPARATOR = r'(\n{2,} ?[_-]{32,})'
 #: Common mail separators (+ old Outlook separator)
-GENERIC_MAIL_SEPARATOR = r'^-{5,} ?Original Message ?-{5,}$'
+GENERIC_MAIL_SEPARATOR = r'^-{5,} ?(?:Original Message|Oprindelig besked) ?-{5,}$'
 
 #: Outlook Signature defaults; line optionally starts with whitespace, contains two
 #: hyphens or underscores, and ends with optional whitespace.
@@ -248,5 +248,28 @@ MAIL_LANGUAGES: Dict[str, Dict[str, str]] = {
             'S přáním hezkého dne,',
         ],
         'sent_from': r'Odesláno z mého.*',
+    },
+    'da': {
+        'wrote_header': r'^(?!Den[.\s]*Den\s(.+?\s?.+?)\sskrev:)('
+                        + QUOTED_MATCH_INCLUDE
+                        + r'Den\s(?:.+?\s?.+?)\s?skrev:)$',
+        'from_header': r'((?:(?:^|\n|\n'
+                       + QUOTED_MATCH_INCLUDE
+                       + r')[* ]*(?:Fra|Sendt|Til|Emne|Dato|Cc|Organisation):[ *]*(?:\s{,2}).*){2,}(?:\n.*){,1})',
+        'disclaimers': [
+            'Advarsel:',
+            'Bem\u00e6rk:',
+            'Fortroligt:',
+            'Ansvarsfraskrivelse:',
+        ],
+        'signatures': [
+            'Med venlig hilsen',
+            'Venlig hilsen',
+            'Mange tak',
+            'P\u00e5 forh\u00e5nd tak',
+            'De bedste hilsner',
+            'Mvh',
+        ],
+        'sent_from': r'Sendt fra min.*',
     },
 }
