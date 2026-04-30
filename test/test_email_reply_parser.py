@@ -170,7 +170,24 @@ class EmailMessageTest(unittest.TestCase):
         mail = self.get_email('begins_with_signature', parse=True, languages=['en'])
         self.assertTrue(mail.replies[0].signatures. startswith("Regards,"))
 
-    def get_email(self, name: str, parse: bool = True, languages: list = None):
+    # Danish language
+    def test_danish_email_parsing(self):
+        mail = self.get_email('danish_email_clean', parse=True, languages=['da'])
+        print(f"Danish email parsed into {len(mail.replies)} replies")
+        for i, reply in enumerate(mail.replies):
+            print(f"Reply {i+1}: {reply.body[:100]}...")
+        
+        # Should split on Danish headers "-------- Oprindelig besked --------"
+        self.assertTrue(len(mail.replies) >= 2, f"Expected at least 2 replies, got {len(mail.replies)}")
+        
+        # First reply should be the latest response
+        self.assertTrue("That solved the issue, thanks for the help!" in mail.replies[0].body)
+        
+        # Should detect "Sendt fra min Galaxy" as signature
+        self.assertTrue("Sendt fra min Galaxy" in mail.replies[0].signatures or 
+                       "Sendt fra min Galaxy" in mail.replies[0].content)
+
+    def get_email(self, name: str, parse: bool = True, languages: Optional[List[str]] = None):
         """ Return EmailMessage instance or text content """
         with open(f'test/emails/{name}.txt') as f:
             text = f.read()

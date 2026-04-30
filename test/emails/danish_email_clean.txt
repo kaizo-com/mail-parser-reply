@@ -1,0 +1,26 @@
+That solved the issue, thanks for the help!
+
+Sendt fra min iPhone
+
+-------- Oprindelig besked --------
+Fra: Tech Support Danmark <support@techsupport.dk>
+Dato: 22.04.2026 14.32 (GMT+01:00)
+Til: Lars Hansen <lars.hansen@email.dk>
+Emne: [Tech Support Danmark] Svar på din forespørgsel
+
+Hi Lars,
+
+For random keyboard inputs, I'd recommend giving those steps a try:
+
+1. Unplug your keyboard from your device.
+3. All OmniPoint keys should be lit up yellow.
+4. While the keys are yellow, please press every OmniPoint key until it has bottomed out at least once.
+5. OmniPoint keys that have been fully pressed will change to a soft white color.
+
+Hope this solves the issue! If you have any questions, please don't hesitate to ask.
+Thanks.
+
+Best regards,
+Mikael
+
+
